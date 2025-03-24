@@ -113,21 +113,22 @@ def get_job_report(api_url, api_key, job_id, outfile):
     with open(outfile, "w") as f:
         json.dump(report, f, indent=4)
     
-    print(f"Finished writing {f}")
+    print(f"Finished writing {outfile}")
 
 # Usage:
 # 1. Create a Galaxy account on a Galaxy server and generate an API key in the user settings
 # 2. Run a job
 # 3. Get the job API ID from the job details
 # 4. Run the script as follows:
-#    ``
+#    `python job_report.py -j yyyyy -k xxxxx -u https://usegalaxy.eu -o test_report.json`
+
 
 def main():
 
     parser = argparse.ArgumentParser(description='Job report')
     parser.add_argument("-j", "--job_id", default=None, help="job_id")
     parser.add_argument("-k", "--api_key", default=None, help="api_key")
-    parser.add_argument("-u", "--api_url", default=None, help="api_url")
+    parser.add_argument("-u", "--api_url", default=None, help="api_url e.g. https://usegalaxy.eu")
     parser.add_argument("-o", "--out", default=None, help="output job report file in json format")    
     args = parser.parse_args()
     get_job_report(args.api_url, args.api_key, args.job_id, args.out)
