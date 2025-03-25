@@ -17,17 +17,19 @@ def get_job_report(api_url, api_key, job_id, outfile):
     tool_details = gi.tools.show_tool(tool_id, io_details=True, link_details=True)
     xrefs = tool_details.get("xrefs", [])
     biotools_id = ""
-    rrid = ""
+    rrid_uri = ""
     for ref in xrefs:
         if ref.get("reftype", "") == "bio.tools":
             biotools_id = ref.get("value")
-            biotools_details = requests.get(f"https://bio.tools/api/t/?biotoolsID=\"{biotools_id}\"&format=json").json()
-            other_ids = biotools_details.get("list", [])[0].get("otherID", "")
-            for id in other_ids:
-                if id.get("type", "") == "rrid":
-                    rrid = id.get("value", "")
-            
-            
+            biotools_details = requests.get(f"https://bio.tools/api/t/?biotoolsID=\"{biotools_id}\"&format=json").json().get("list", [])
+
+            if biotools_details:
+                other_ids = biotools_details[0].get("otherID", "")
+                for id in other_ids:
+                    if id.get("type", "") == "rrid":
+                        rrid_uri = "https://identifiers.org/RRID/" + id.get("value", "").upper()
+
+    biotools_uri = "https://bio.tools/" + biotools_id
     tool_version = tool_details.get("version", "")
     tool_package_version = tool_details.get("tool_shed_repository", {}).get("changeset_revision", "")
     tool_name = tool_details.get("name", "")
@@ -83,7 +85,7 @@ def get_job_report(api_url, api_key, job_id, outfile):
     # Fill report
     report = {
         "report_format_version": "0.0.1",
-        "tool_identifier": [biotools_id, rrid, tool_id],
+        "tool_identifier": [biotools_uri, rrid_uri, tool_id],
         "tool_name": tool_name,
         "tool_version": tool_version,
         "tool_package_version": tool_package_version,

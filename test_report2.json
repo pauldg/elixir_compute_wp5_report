@@ -1,8 +1,8 @@
 {
     "report_format_version": "0.0.1",
     "tool_identifier": [
-        "signalp",
-        "rrid:SCR_015644",
+        "https://bio.tools/signalp",
+        "https://identifiers.org/RRID/RRID:SCR_015644",
         "toolshed.g2.bx.psu.edu/repos/peterjc/tmhmm_and_signalp/signalp3/0.0.14"
     ],
     "tool_name": "SignalP 3.0",
